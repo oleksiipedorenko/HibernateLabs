@@ -1,5 +1,6 @@
 package ua.skillsup.practice.hibernate.dao.entity;
 
+import javax.persistence.*;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Objects;
@@ -7,15 +8,33 @@ import java.util.Objects;
 /**
  * Created by oleksii on 10/10/15.
  */
+@Entity
+@Table(name = "LOT")
 public class Lot {
 
+	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	@Column(name = "ID")
 	private Long id;
+
+	@ManyToOne
+	@JoinColumn(name = "ITEM_ID")
 	private Item item;
+
+	@ManyToOne
+	@JoinColumn(name = "OWNER_ID")
 	private User owner;
+
+
+	@Transient
 	private LocalDate datePlaced;
+	@Transient
 	private BigDecimal startPrice;
+	@Transient
 	private User buyer;
+	@Transient
 	private BigDecimal currentPrice;
+	@Transient
 	private LocalDate dateEnd;
 
 	public Long getId() {

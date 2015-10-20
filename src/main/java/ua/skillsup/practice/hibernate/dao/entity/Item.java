@@ -1,18 +1,40 @@
 package ua.skillsup.practice.hibernate.dao.entity;
 
+import javax.persistence.*;
 import java.util.Objects;
+import java.util.Set;
 
 /**
  * Created by oleksii on 10/10/15.
  */
+@Entity
+@Table(name = "ITEM")
 public class Item {
 
+	@Id
+	@Column(name = "ID")
 	private Long id;
+	@Column(name = "TITLE", nullable = false)
 	private String title;
+	@Column(name = "DESCRIPTION", nullable = false)
 	private String description;
+	@Column(name = "WIDTH")
 	private Double width;
+	@Column(name = "HEIGHT")
 	private Double height;
+	@Column(name = "WEIGHT")
 	private Double weight;
+
+	@OneToMany(mappedBy = "item")
+	private Set<Lot> lots;
+
+	@ManyToMany
+	@JoinTable(
+			name = "ITEM_CATEGORY",
+			inverseJoinColumns = @JoinColumn(name = "CATEGORY_ID"),
+			joinColumns = @JoinColumn(name = "ITEM_ID")
+	)
+	private Set<Category> categories;
 
 	public Long getId() {
 		return id;
@@ -60,6 +82,10 @@ public class Item {
 
 	public void setWeight(Double weight) {
 		this.weight = weight;
+	}
+
+	public Set<Category> getCategories() {
+		return categories;
 	}
 
 	@Override
