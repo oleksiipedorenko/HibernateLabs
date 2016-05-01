@@ -1,13 +1,10 @@
 package ua.skillsup.practice.hibernate.converters;
 
-import ua.skillsup.practice.hibernate.dao.entity.Item;
-import ua.skillsup.practice.hibernate.dao.entity.Lot;
-import ua.skillsup.practice.hibernate.dao.entity.LotHistory;
-import ua.skillsup.practice.hibernate.dao.entity.User;
-import ua.skillsup.practice.hibernate.model.ItemDto;
-import ua.skillsup.practice.hibernate.model.LotDto;
-import ua.skillsup.practice.hibernate.model.LotHistoryDto;
-import ua.skillsup.practice.hibernate.model.UserDto;
+import ua.skillsup.practice.hibernate.dao.entity.*;
+import ua.skillsup.practice.hibernate.model.*;
+
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Created by oleksii on 10/10/15.
@@ -43,6 +40,7 @@ public final class EntityDtoConverter {
 		itemDto.setHeight(item.getHeight());
 		itemDto.setWeight(item.getWeight());
 		itemDto.setWidth(item.getWidth());
+
 		return itemDto;
 	}
 
@@ -130,5 +128,20 @@ public final class EntityDtoConverter {
 		lotHistoryDto.setChangeTime(lotHistory.getChangeTime());
 		lotHistoryDto.setPrice(lotHistory.getPrice());
 		return lotHistoryDto;
+	}
+
+	public static CategoryDto convert(Category category) {
+		if (category == null) {
+			return null;
+		}
+		CategoryDto categoryDto = new CategoryDto();
+		categoryDto.setId(category.getId());
+		categoryDto.setTitle(category.getTitle());
+		categoryDto.setDescription(category.getDescription());
+		categoryDto.setItems(new HashSet<ItemDto>());
+		for (Item item : category.getItems()) {
+			categoryDto.getItems().add(convert(item));
+		}
+		return categoryDto;
 	}
 }

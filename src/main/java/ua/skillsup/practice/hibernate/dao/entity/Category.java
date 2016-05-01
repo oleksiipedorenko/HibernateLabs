@@ -1,15 +1,31 @@
 package ua.skillsup.practice.hibernate.dao.entity;
 
+import javax.persistence.*;
 import java.util.Objects;
+import java.util.Set;
 
 /**
  * Created by oleksii on 10/18/15.
  */
+@Entity
+@Table(name = "CATEGORY")
 public class Category {
 
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "ID")
 	private Long id;
+	@Column(name = "TITLE")
 	private String title;
+	@Column(name = "DESCRIPTION")
 	private String description;
+	@ManyToMany
+	@JoinTable(
+			name = "ITEM_CATEGORY",
+			joinColumns = @JoinColumn(name = "CATEGORY_ID"),
+			inverseJoinColumns = @JoinColumn(name = "ITEM_ID")
+	)
+	private Set<Item> items;
 
 	public long getId() {
 		return id;
@@ -33,6 +49,14 @@ public class Category {
 
 	public void setDescription(String description) {
 		this.description = description;
+	}
+
+	public Set<Item> getItems() {
+		return items;
+	}
+
+	public void setItems(Set<Item> items) {
+		this.items = items;
 	}
 
 	@Override

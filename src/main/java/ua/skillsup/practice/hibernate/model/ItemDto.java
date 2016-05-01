@@ -1,6 +1,7 @@
 package ua.skillsup.practice.hibernate.model;
 
 import java.util.Objects;
+import java.util.Set;
 
 /**
  * Created by oleksii on 10/10/15.
@@ -13,6 +14,7 @@ public class ItemDto {
 	private Double width;
 	private Double height;
 	private Double weight;
+	private Set<LotDto> lots;
 
 	public Long getId() {
 		return id;
@@ -62,6 +64,14 @@ public class ItemDto {
 		this.weight = weight;
 	}
 
+	public Set<LotDto> getLots() {
+		return lots;
+	}
+
+	public void setLots(Set<LotDto> lots) {
+		this.lots = lots;
+	}
+
 	@Override
 	public boolean equals(Object o) {
 		if (this == o) return true;
@@ -89,6 +99,7 @@ public class ItemDto {
 				", width=" + width +
 				", height=" + height +
 				", weight=" + weight +
+				", lots=" + lots +
 				'}';
 	}
 }

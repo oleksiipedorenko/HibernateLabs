@@ -2,19 +2,16 @@ package ua.skillsup.practice.hibernate.service.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import ua.skillsup.practice.hibernate.dao.ItemDao;
-import ua.skillsup.practice.hibernate.dao.LotDao;
-import ua.skillsup.practice.hibernate.dao.LotHistoryDao;
-import ua.skillsup.practice.hibernate.dao.UserDao;
-import ua.skillsup.practice.hibernate.model.ItemDto;
-import ua.skillsup.practice.hibernate.model.LotDto;
-import ua.skillsup.practice.hibernate.model.LotHistoryDto;
-import ua.skillsup.practice.hibernate.model.UserDto;
+import org.springframework.transaction.annotation.Transactional;
+import ua.skillsup.practice.hibernate.dao.*;
+import ua.skillsup.practice.hibernate.model.*;
 import ua.skillsup.practice.hibernate.service.AuctionService;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Created by oleksii on 10/10/15.
@@ -31,10 +28,12 @@ public class AuctionServiceImpl implements AuctionService {
 	private ItemDao itemDao;
 	@Autowired
 	private LotDao lotDao;
+	@Autowired
+	private CategoryDao categoryDao;
 
-
+	@Transactional(readOnly = true)
 	public List<ItemDto> getAllItems() {
-		return null;
+		return itemDao.findAll();
 	}
 
 	public UserDto getUser(String login) {
@@ -46,11 +45,21 @@ public class AuctionServiceImpl implements AuctionService {
 	}
 
 	public List<LotDto> getAllLots() {
-		return null;
+		return lotDao.findAll();
 	}
 
-	public LotDto createLot(String login, String item, BigDecimal startPrice, int period) {
-		return null;
+	@Transactional
+	public LotDto createLot(String login, String item,
+	                        BigDecimal startPrice, int period) {
+		LotDto lot = new LotDto();
+		lot.setCurrentPrice(startPrice);
+		lot.setOwner(userDao.findByLogin(login));
+		lot.setDatePlaced(LocalDate.now());
+		lot.setDateEnd(LocalDate.now().plusDays(period));
+		lot.setItem(itemDao.findByTitle(item));
+		long id = lotDao.create(lot);
+		lot.setId(id);
+		return lot;
 	}
 
 	public void makeBid(String login, long lotId, BigDecimal newPrice) {
@@ -59,5 +68,16 @@ public class AuctionServiceImpl implements AuctionService {
 
 	public List<LotHistoryDto> getLotHistory(long lotId) {
 		return null;
+	}
+
+	@Override
+	@Transactional
+	public Set<ItemDto> getItemsOfCategory(String category) {
+		CategoryDto categoryDto = categoryDao.findByTitle(category);
+		if (categoryDto == null) {
+			return Collections.emptySet();
+		}
+
+		return categoryDto.getItems();
 	}
 }

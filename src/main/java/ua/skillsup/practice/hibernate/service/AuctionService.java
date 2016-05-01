@@ -8,6 +8,7 @@ import ua.skillsup.practice.hibernate.model.UserDto;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Created by oleksii on 10/10/15.
@@ -66,5 +67,7 @@ public interface AuctionService {
 	 * @return bid history in chronological order
 	 */
 	List<LotHistoryDto> getLotHistory(long lotId);
+
+	Set<ItemDto> getItemsOfCategory(String category);
 
 }
