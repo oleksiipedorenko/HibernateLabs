@@ -1,14 +1,22 @@
 package ua.skillsup.practice.hibernate.dao.entity;
 
+import javax.persistence.*;
 import java.util.Objects;
 
 /**
  * Created by oleksii on 10/18/15.
  */
+@Entity
+@Table(name = "CATEGORY")
 public class Category {
 
+	@Id
+	@Column(name = "ID")
+	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
+	@Column(name = "TITLE")
 	private String title;
+	@Column(name = "DESCRIPTION")
 	private String description;
 
 	public long getId() {
