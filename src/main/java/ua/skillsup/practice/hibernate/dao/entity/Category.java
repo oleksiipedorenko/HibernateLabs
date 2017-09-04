@@ -1,15 +1,26 @@
 package ua.skillsup.practice.hibernate.dao.entity;
 
+import javax.persistence.*;
+import java.util.List;
 import java.util.Objects;
 
 /**
  * Created by oleksii on 10/18/15.
  */
+@Entity
+@Table(name = "CATEGORY")
 public class Category {
 
+	@Id
+	@Column(name = "ID")
 	private Long id;
+	@Column(name = "TITLE")
 	private String title;
+	@Column(name = "DESCRIPTION")
 	private String description;
+
+	@ManyToMany(fetch = FetchType.LAZY, mappedBy = "categoryList")
+	private List<Item> items;
 
 	public long getId() {
 		return id;
@@ -33,6 +44,14 @@ public class Category {
 
 	public void setDescription(String description) {
 		this.description = description;
+	}
+
+	public List<Item> getItems() {
+		return items;
+	}
+
+	public void setItems(List<Item> items) {
+		this.items = items;
 	}
 
 	@Override

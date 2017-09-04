@@ -11,7 +11,7 @@
     <properties>
         <java.version>1.8</java.version>
         <hibernate.version>4.3.7.Final</hibernate.version>
-        <spring.version>4.1.5.RELEASE</spring.version>
+        <spring.version>4.3.5.RELEASE</spring.version>
     </properties>
 
     <dependencies>

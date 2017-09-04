@@ -2,6 +2,7 @@ package ua.skillsup.practice.hibernate.service.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ua.skillsup.practice.hibernate.dao.ItemDao;
 import ua.skillsup.practice.hibernate.dao.LotDao;
 import ua.skillsup.practice.hibernate.dao.LotHistoryDao;
@@ -22,15 +23,18 @@ import java.util.List;
 @Service
 public class AuctionServiceImpl implements AuctionService {
 
+	private final LotHistoryDao historyDao;
+	private final UserDao userDao;
+	private final ItemDao itemDao;
+	private final LotDao lotDao;
 
 	@Autowired
-	private LotHistoryDao historyDao;
-	@Autowired
-	private UserDao userDao;
-	@Autowired
-	private ItemDao itemDao;
-	@Autowired
-	private LotDao lotDao;
+	public AuctionServiceImpl(LotHistoryDao historyDao, UserDao userDao, ItemDao itemDao, LotDao lotDao) {
+		this.historyDao = historyDao;
+		this.userDao = userDao;
+		this.itemDao = itemDao;
+		this.lotDao = lotDao;
+	}
 
 
 	public List<ItemDto> getAllItems() {
@@ -49,8 +53,21 @@ public class AuctionServiceImpl implements AuctionService {
 		return null;
 	}
 
-	public LotDto createLot(String login, String item, BigDecimal startPrice, int period) {
-		return null;
+	@Transactional
+	public LotDto createLot(String login, String title, BigDecimal startPrice, int period) {
+		UserDto user = userDao.findByLogin(login);
+		ItemDto item = itemDao.findByTitle(title);
+		LotDto lot = new LotDto();
+		lot.setItem(item);
+		lot.setOwner(user);
+		lot.setStartPrice(startPrice);
+		lot.setCurrentPrice(startPrice);
+		lot.setDatePlaced(LocalDate.now());
+		lot.setDateEnd(LocalDate.now().plusDays(period));
+
+		long l = lotDao.create(lot);
+		lot.setId(l);
+		return lot;
 	}
 
 	public void makeBid(String login, long lotId, BigDecimal newPrice) {

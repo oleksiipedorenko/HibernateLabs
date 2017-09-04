@@ -45,11 +45,11 @@ public interface AuctionService {
 	/**
 	 * Create a lot for concrete item
 	 * @param login an item owner's login
-	 * @param item an item's title
+	 * @param title an item's title
 	 * @param startPrice start price for auction lot
 	 * @param period days count for auction lot
 	 */
-	LotDto createLot(String login, String item, BigDecimal startPrice, int period);
+	LotDto createLot(String login, String title, BigDecimal startPrice, int period);
 
 	/**
 	 * Make new auction bid. User made current bid should be different from current lot buyer.
